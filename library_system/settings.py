@@ -25,7 +25,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     # Local apps
-    'library', 
+    'library',
+    'django_celery_beat' 
 ]
 
 MIDDLEWARE = [

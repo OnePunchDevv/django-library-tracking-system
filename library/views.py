@@ -52,3 +52,14 @@ class MemberViewSet(viewsets.ModelViewSet):
 class LoanViewSet(viewsets.ModelViewSet):
     queryset = Loan.objects.all()
     serializer_class = LoanSerializer
+
+    @action(detail=True, methods=['post'])
+    def extend_due_date(self,request, pk=None):
+        loan = Loan.objects.first(pk=pk)
+        days = request.data.get("additional_days", 0)
+
+        if loan.due_date < timezone.now():
+            return Response({'error': "Cannot extend the due date"}, status=status.HTTP_400_BAD_REQUEST)
+        additional_days = int(days)
+        loan.extend_due_date(additional_days)
+        return Response({'message': f"Due extended by {additional_days} days"}, status=status.HTTP_200_OK)
